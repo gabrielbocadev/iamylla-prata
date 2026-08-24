@@ -1,0 +1,13 @@
+{
+  "settings": {
+    "storeName": "Iamylla Prata's",
+    "whatsapp": "",
+    "adminPassword": "prata123"
+  },
+  "products": [
+    {"id":"p1","name":"Anel Ondas","category":"Anéis","price":89.90,"image":"","description":"Anel fino em prata 925 com acabamento texturizado.","type":"estoque","stock":6,"prazo":null},
+    {"id":"p2","name":"Brinco Gota","category":"Brincos","price":64.90,"image":"","description":"Brinco gota minimalista, prata 925.","type":"estoque","stock":3,"prazo":null},
+    {"id":"p3","name":"Colar Ponto de Luz","category":"Colares","price":129.90,"image":"","description":"Colar delicado com zircônia central.","type":"encomenda","stock":0,"prazo":7},
+    {"id":"p4","name":"Pulseira Elos","category":"Pulseiras","price":99.90,"image":"","description":"Pulseira de elos maciça, prata 925.","type":"encomenda","stock":0,"prazo":10}
+  ]
+}
