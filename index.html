@@ -56,11 +56,17 @@
     border-bottom:1px solid var(--pink-pale);
   }
   .header-inner{
-    max-width:1180px;margin:0 auto;padding:14px 24px;
+    max-width:1180px;margin:0 auto;padding:10px 24px;
     display:flex;align-items:center;justify-content:space-between;gap:16px;
   }
   .brand{display:flex;align-items:center;gap:12px;}
-  .brand img{height:38px;width:auto;display:block;}
+  .brand img{height:64px;width:auto;display:block;}
+  @media (max-width:820px){ .brand img{height:50px;} }
+  .header-login-btn{
+    background:transparent;color:var(--plum);border:1px solid var(--plum-soft);
+    padding:9px 18px;border-radius:var(--radius);font-size:13px;letter-spacing:.04em;
+  }
+  .header-login-btn:hover{border-color:var(--plum);background:var(--pink-pale);}
   nav.main-nav{display:flex;gap:28px;align-items:center;}
   nav.main-nav button.navlink{
     background:none;border:none;font-size:14px;letter-spacing:.04em;
@@ -261,11 +267,13 @@
     <nav class="main-nav">
       <button class="navlink active" data-view="catalog" data-filter="todas">Catálogo</button>
       <button class="navlink" data-view="catalog" data-filter="encomenda">Sob encomenda</button>
-      <button class="navlink" data-view="admin">Área da loja</button>
     </nav>
-    <button class="cart-btn" id="openCartBtn">
-      Sacola <span class="cart-count" id="cartCount">0</span>
-    </button>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <button class="header-login-btn" id="headerLoginBtn">Entrar</button>
+      <button class="cart-btn" id="openCartBtn">
+        Sacola <span class="cart-count" id="cartCount">0</span>
+      </button>
+    </div>
   </div>
 </header>
 
@@ -309,17 +317,6 @@
 </main>
 
 <main id="viewAdmin" style="display:none;">
-  <div class="admin-shell" id="adminGate">
-    <h2 style="margin-top:40px;">Área da loja</h2>
-    <p class="helper" style="margin-top:-4px;">Entre com a senha da loja para gerenciar as joias.</p>
-    <div class="field" style="max-width:280px;">
-      <label for="adminPass">Senha</label>
-      <input type="password" id="adminPass">
-    </div>
-    <div class="err" id="adminErr" style="display:none;">Senha incorreta.</div>
-    <button class="btn-primary" id="adminLoginBtn">Entrar</button>
-  </div>
-
   <div class="admin-shell" id="adminPanel" style="display:none;">
     <div class="admin-row-head">
       <h2 style="margin:0;">Painel da loja</h2>
@@ -362,7 +359,11 @@
           <input type="text" id="cfgWhats" placeholder="Ex: 5518999999999">
         </div>
         <div class="field">
-          <label for="cfgPass">Senha da área da loja</label>
+          <label for="cfgEmail">Email de acesso (login)</label>
+          <input type="email" id="cfgEmail">
+        </div>
+        <div class="field">
+          <label for="cfgPass">Senha de acesso</label>
           <input type="text" id="cfgPass">
         </div>
         <button class="btn-primary" id="saveSettingsBtn" style="padding:10px 20px;">Salvar configurações</button>
@@ -385,6 +386,27 @@
     </div>
   </div>
 </main>
+
+<div class="overlay" id="loginOverlay"></div>
+<div class="modal-wrap" id="loginModalWrap">
+  <div class="modal">
+    <h3>Entrar</h3>
+    <p class="helper" style="margin-top:-8px;">Acesso restrito à administração da loja.</p>
+    <div class="field">
+      <label for="loginEmail">Email</label>
+      <input type="email" id="loginEmail" autocomplete="username">
+    </div>
+    <div class="field">
+      <label for="loginPass">Senha</label>
+      <input type="password" id="loginPass" autocomplete="current-password">
+    </div>
+    <div class="err" id="loginErr" style="display:none;">Email ou senha incorretos.</div>
+    <div class="modal-actions">
+      <button class="btn-ghost" id="cancelLoginBtn">Cancelar</button>
+      <button class="btn-primary" id="submitLoginBtn">Entrar</button>
+    </div>
+  </div>
+</div>
 
 <div class="overlay" id="productOverlay"></div>
 <div class="modal-wrap" id="productModalWrap">
@@ -490,7 +512,7 @@
   "use strict";
 
   var DEFAULTS = {
-    settings: { storeName: "Iamylla Prata's", whatsapp: "", adminPassword: "prata123" },
+    settings: { storeName: "Iamylla Prata's", whatsapp: "", adminEmail: "loja@iamyllaprata.com", adminPassword: "prata123" },
     products: [
       {id:"p1", name:"Anel Ondas", category:"Anéis", price:89.90, image:"", description:"Anel fino em prata 925 com acabamento texturizado.", type:"estoque", stock:6, prazo:null},
       {id:"p2", name:"Brinco Gota", category:"Brincos", price:64.90, image:"", description:"Brinco gota minimalista, prata 925.", type:"estoque", stock:3, prazo:null},
@@ -576,6 +598,7 @@
     document.getElementById('footerBrand').textContent = state.settings.storeName + ' — joias em prata';
     document.getElementById('cfgStoreName').value = state.settings.storeName;
     document.getElementById('cfgWhats').value = state.settings.whatsapp;
+    document.getElementById('cfgEmail').value = state.settings.adminEmail || '';
     document.getElementById('cfgPass').value = state.settings.adminPassword;
 
     renderGrid();
@@ -895,6 +918,7 @@
     clearDraft();
     document.getElementById('cfgStoreName').value = state.settings.storeName;
     document.getElementById('cfgWhats').value = state.settings.whatsapp;
+    document.getElementById('cfgEmail').value = state.settings.adminEmail || '';
     document.getElementById('cfgPass').value = state.settings.adminPassword;
     renderAdminTable();
     renderGrid();
@@ -913,14 +937,36 @@
     document.getElementById('viewCatalog').style.display = 'none';
     document.getElementById('viewAdmin').style.display = '';
     document.querySelectorAll('.navlink').forEach(function(b){ b.classList.remove('active'); });
-    document.querySelector('.navlink[data-view="admin"]').classList.add('active');
-    if(state.adminAuthed){
-      document.getElementById('adminGate').style.display = 'none';
-      document.getElementById('adminPanel').style.display = '';
-      updatePublishBanner();
+    document.getElementById('adminPanel').style.display = '';
+    updatePublishBanner();
+  }
+  function updateHeaderLoginBtn(){
+    var btn = document.getElementById('headerLoginBtn');
+    btn.textContent = state.adminAuthed ? 'Painel' : 'Entrar';
+  }
+  function openLoginModal(){
+    document.getElementById('loginErr').style.display = 'none';
+    document.getElementById('loginEmail').value = '';
+    document.getElementById('loginPass').value = '';
+    document.getElementById('loginOverlay').classList.add('show');
+    document.getElementById('loginModalWrap').classList.add('show');
+  }
+  function closeLoginModal(){
+    document.getElementById('loginOverlay').classList.remove('show');
+    document.getElementById('loginModalWrap').classList.remove('show');
+  }
+  function attemptLogin(){
+    var email = document.getElementById('loginEmail').value.trim().toLowerCase();
+    var pass = document.getElementById('loginPass').value;
+    var expectedEmail = (state.settings.adminEmail || '').trim().toLowerCase();
+    var emailOk = !expectedEmail || email === expectedEmail;
+    if(emailOk && pass === state.settings.adminPassword){
+      state.adminAuthed = true;
+      updateHeaderLoginBtn();
+      closeLoginModal();
+      showAdmin();
     } else {
-      document.getElementById('adminGate').style.display = '';
-      document.getElementById('adminPanel').style.display = 'none';
+      document.getElementById('loginErr').style.display = 'block';
     }
   }
 
@@ -963,20 +1009,19 @@
   document.getElementById('checkoutOverlay').addEventListener('click', closeCheckout);
   document.getElementById('sendWhatsBtn').addEventListener('click', sendToWhatsapp);
 
-  document.getElementById('adminLoginBtn').addEventListener('click', function(){
-    var val = document.getElementById('adminPass').value;
-    if(val === state.settings.adminPassword){
-      state.adminAuthed = true;
-      document.getElementById('adminErr').style.display = 'none';
-      showAdmin();
-    } else {
-      document.getElementById('adminErr').style.display = 'block';
-    }
+  document.getElementById('headerLoginBtn').addEventListener('click', function(){
+    if(state.adminAuthed){ showAdmin(); }
+    else { openLoginModal(); }
   });
+  document.getElementById('submitLoginBtn').addEventListener('click', attemptLogin);
+  document.getElementById('loginPass').addEventListener('keydown', function(e){ if(e.key==='Enter') attemptLogin(); });
+  document.getElementById('cancelLoginBtn').addEventListener('click', closeLoginModal);
+  document.getElementById('loginOverlay').addEventListener('click', closeLoginModal);
+
   document.getElementById('adminLogoutBtn').addEventListener('click', function(){
     state.adminAuthed = false;
-    document.getElementById('adminPass').value = '';
-    showAdmin();
+    updateHeaderLoginBtn();
+    showCatalog();
   });
 
   document.querySelectorAll('.admin-tab').forEach(function(btn){
@@ -999,6 +1044,7 @@
   document.getElementById('saveSettingsBtn').addEventListener('click', function(){
     state.settings.storeName = document.getElementById('cfgStoreName').value.trim() || DEFAULTS.settings.storeName;
     state.settings.whatsapp = document.getElementById('cfgWhats').value.trim();
+    state.settings.adminEmail = document.getElementById('cfgEmail').value.trim();
     state.settings.adminPassword = document.getElementById('cfgPass').value.trim() || DEFAULTS.settings.adminPassword;
     saveDraft();
     document.getElementById('footerBrand').textContent = state.settings.storeName + ' — joias em prata';
