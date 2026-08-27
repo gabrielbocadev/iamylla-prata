@@ -100,16 +100,34 @@
   }
   .btn-ghost:hover{border-color:var(--plum);}
   .hero-art{display:flex;align-items:center;justify-content:center;}
-  .ring-draw{width:100%;max-width:340px;}
-  .ring-draw path,.ring-draw circle,.ring-draw line{
+  .ring-draw{width:100%;max-width:300px;}
+  .ring-draw path,.ring-draw circle,.ring-draw line:not(.divider){
     fill:none;stroke:var(--pink-deep);stroke-width:1.4;
     stroke-dasharray:900; stroke-dashoffset:900;
     animation:draw 2.6s ease forwards;
   }
   .ring-draw .gem{animation-delay:1.6s;}
+  .ring-draw .divider{
+    fill:none;stroke:var(--pink-deep);stroke-width:1;
+    stroke-dasharray:100;stroke-dashoffset:100;
+    animation:draw 1s ease forwards;animation-delay:2.1s;
+  }
+  .ring-draw .wordmark{
+    font-family:'Cormorant Garamond',serif;font-weight:500;
+    font-size:29px;letter-spacing:6px;fill:var(--plum);
+    opacity:0;animation:fadeUp .9s ease forwards;
+  }
+  .ring-draw text.wordmark:nth-of-type(1){animation-delay:2.3s;}
+  .ring-draw text.wordmark:nth-of-type(2){animation-delay:2.5s;}
+  .ring-draw .tagline{
+    font-family:'Jost',sans-serif;font-size:10px;letter-spacing:3.5px;
+    fill:var(--pink-deep);opacity:0;animation:fadeUp .9s ease forwards;animation-delay:2.8s;
+  }
   @keyframes draw{to{stroke-dashoffset:0;}}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
   @media (prefers-reduced-motion: reduce){
     .ring-draw path,.ring-draw circle,.ring-draw line{animation:none;stroke-dashoffset:0;}
+    .ring-draw .wordmark,.ring-draw .tagline{animation:none;opacity:1;}
   }
 
   .catalog-section{max-width:1180px;margin:0 auto;padding:20px 24px 90px;}
@@ -300,13 +318,17 @@
       </div>
     </div>
     <div class="hero-art">
-      <svg class="ring-draw" viewBox="0 0 200 200" fill="none">
-        <circle cx="100" cy="120" r="52" />
-        <path class="gem" d="M75 55 L100 30 L125 55 L112 75 L88 75 Z" />
-        <line class="gem" x1="75" y1="55" x2="88" y2="75" />
-        <line class="gem" x1="125" y1="55" x2="112" y2="75" />
-        <line class="gem" x1="88" y1="75" x2="100" y2="30" />
-        <line class="gem" x1="112" y1="75" x2="100" y2="30" />
+      <svg class="ring-draw" viewBox="0 0 200 300" fill="none">
+        <circle cx="100" cy="95" r="48" />
+        <path class="gem" d="M78 48 L100 22 L122 48 L110 66 L90 66 Z" />
+        <line class="gem" x1="78" y1="48" x2="90" y2="66" />
+        <line class="gem" x1="122" y1="48" x2="110" y2="66" />
+        <line class="gem" x1="90" y1="66" x2="100" y2="22" />
+        <line class="gem" x1="110" y1="66" x2="100" y2="22" />
+        <line class="divider" x1="62" y1="182" x2="138" y2="182" />
+        <text class="wordmark" x="100" y="215" text-anchor="middle">IAMYLLA</text>
+        <text class="wordmark" x="100" y="248" text-anchor="middle">PRATA'S</text>
+        <text class="tagline" x="100" y="274" text-anchor="middle">JOIAS EM PRATA 925</text>
       </svg>
     </div>
   </section>
