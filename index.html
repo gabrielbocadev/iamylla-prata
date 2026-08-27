@@ -100,34 +100,48 @@
   }
   .btn-ghost:hover{border-color:var(--plum);}
   .hero-art{display:flex;align-items:center;justify-content:center;}
-  .ring-draw{width:100%;max-width:300px;}
-  .ring-draw path,.ring-draw circle,.ring-draw line:not(.divider){
-    fill:none;stroke:var(--pink-deep);stroke-width:1.4;
-    stroke-dasharray:900; stroke-dashoffset:900;
-    animation:draw 2.6s ease forwards;
-  }
-  .ring-draw .gem{animation-delay:1.6s;}
-  .ring-draw .divider{
+  .hero-emblem{width:100%;max-width:400px;}
+  .hero-emblem .divider{
     fill:none;stroke:var(--pink-deep);stroke-width:1;
-    stroke-dasharray:100;stroke-dashoffset:100;
-    animation:draw 1s ease forwards;animation-delay:2.1s;
+    stroke-dasharray:30;stroke-dashoffset:30;
+    animation:draw 1s ease forwards;animation-delay:.2s;
   }
-  .ring-draw .wordmark{
+  .hero-emblem .divider-dot{
+    fill:none;stroke:var(--pink-deep);stroke-width:1;
+    opacity:0;animation:fadeUp .6s ease forwards;animation-delay:.9s;
+  }
+  .hero-emblem .wordmark{
     font-family:'Cormorant Garamond',serif;font-weight:500;
-    font-size:29px;letter-spacing:6px;fill:var(--plum);
+    font-size:44px;letter-spacing:7px;fill:var(--plum);
     opacity:0;animation:fadeUp .9s ease forwards;
   }
-  .ring-draw text.wordmark:nth-of-type(1){animation-delay:2.3s;}
-  .ring-draw text.wordmark:nth-of-type(2){animation-delay:2.5s;}
-  .ring-draw .tagline{
-    font-family:'Jost',sans-serif;font-size:10px;letter-spacing:3.5px;
-    fill:var(--pink-deep);opacity:0;animation:fadeUp .9s ease forwards;animation-delay:2.8s;
+  .hero-emblem text.wordmark:nth-of-type(1){animation-delay:1.1s;}
+  .hero-emblem text.wordmark:nth-of-type(2){animation-delay:1.3s;}
+  .hero-emblem .tagline{
+    font-family:'Jost',sans-serif;font-size:11px;letter-spacing:4px;
+    fill:var(--pink-deep);opacity:0;animation:fadeUp .9s ease forwards;animation-delay:1.6s;
   }
+  .hero-emblem .sparkle{
+    fill:var(--pink-deep);opacity:0;transform-origin:center;transform-box:fill-box;
+    animation:twinkle 2.6s ease-in-out infinite;
+  }
+  .hero-emblem .s1{animation-delay:1.9s;}
+  .hero-emblem .s2{animation-delay:2.4s;}
+  .hero-emblem .s3{animation-delay:2.1s;}
+  .hero-emblem .s4{animation-delay:2.7s;}
   @keyframes draw{to{stroke-dashoffset:0;}}
   @keyframes fadeUp{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+  @keyframes twinkle{
+    0%{opacity:0;transform:scale(.6);}
+    15%{opacity:1;transform:scale(1);}
+    50%{opacity:.5;transform:scale(.85);}
+    75%{opacity:1;transform:scale(1);}
+    100%{opacity:0;transform:scale(.6);}
+  }
   @media (prefers-reduced-motion: reduce){
-    .ring-draw path,.ring-draw circle,.ring-draw line{animation:none;stroke-dashoffset:0;}
-    .ring-draw .wordmark,.ring-draw .tagline{animation:none;opacity:1;}
+    .hero-emblem .divider,.hero-emblem .divider-dot{animation:none;stroke-dashoffset:0;opacity:1;}
+    .hero-emblem .wordmark,.hero-emblem .tagline{animation:none;opacity:1;}
+    .hero-emblem .sparkle{animation:none;opacity:.8;transform:scale(1);}
   }
 
   .catalog-section{max-width:1180px;margin:0 auto;padding:20px 24px 90px;}
@@ -318,17 +332,17 @@
       </div>
     </div>
     <div class="hero-art">
-      <svg class="ring-draw" viewBox="0 0 200 300" fill="none">
-        <circle cx="100" cy="95" r="48" />
-        <path class="gem" d="M78 48 L100 22 L122 48 L110 66 L90 66 Z" />
-        <line class="gem" x1="78" y1="48" x2="90" y2="66" />
-        <line class="gem" x1="122" y1="48" x2="110" y2="66" />
-        <line class="gem" x1="90" y1="66" x2="100" y2="22" />
-        <line class="gem" x1="110" y1="66" x2="100" y2="22" />
-        <line class="divider" x1="62" y1="182" x2="138" y2="182" />
-        <text class="wordmark" x="100" y="215" text-anchor="middle">IAMYLLA</text>
-        <text class="wordmark" x="100" y="248" text-anchor="middle">PRATA'S</text>
-        <text class="tagline" x="100" y="274" text-anchor="middle">JOIAS EM PRATA 925</text>
+      <svg class="hero-emblem" viewBox="0 0 320 260" fill="none">
+        <path class="sparkle s1" d="M40 38 L42.5 45 L49.5 47.5 L42.5 50 L40 57 L37.5 50 L30.5 47.5 L37.5 45 Z" />
+        <path class="sparkle s2" d="M284 32 L287 41 L296 44 L287 47 L284 56 L281 47 L272 44 L281 41 Z" />
+        <path class="sparkle s3" d="M32 210 L34 215 L39 217 L34 219 L32 224 L30 219 L25 217 L30 215 Z" />
+        <path class="sparkle s4" d="M290 200 L293 208 L301 211 L293 214 L290 222 L287 214 L279 211 L287 208 Z" />
+        <line class="divider" x1="128" y1="76" x2="150" y2="76" />
+        <line class="divider" x1="170" y1="76" x2="192" y2="76" />
+        <circle class="divider-dot" cx="160" cy="76" r="3" />
+        <text class="wordmark" x="160" y="128" text-anchor="middle">IAMYLLA</text>
+        <text class="wordmark" x="160" y="176" text-anchor="middle">PRATA'S</text>
+        <text class="tagline" x="160" y="203" text-anchor="middle">JOIAS EM PRATA 925</text>
       </svg>
     </div>
   </section>
